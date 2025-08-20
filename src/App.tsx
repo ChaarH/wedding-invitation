@@ -1,8 +1,14 @@
 import React, { useRef, useState } from "react";
-import YouTube from "react-youtube";
+import YouTube, { type YouTubeEvent, type YouTubeProps } from "react-youtube";
 import floralLeft from "./assets/images/xba9QFH.png";
 import floralRight from "./assets/images/tGikO64.png";
 import "./App.css";
+
+declare global {
+  interface Window {
+    YT: any;
+  }
+}
 
 function App() {
   // Configurações
@@ -15,7 +21,7 @@ function App() {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
   const [awaitingUnmute, setAwaitingUnmute] = useState(false); // sinaliza que clicamos e queremos desmutar ao entrar em PLAYING
 
-  const playerRef = useRef(null);
+  const playerRef = useRef<YouTubeEvent["target"] | null>(null);
 
   // Detecção simples de Safari
   const isSafari = (() => {
@@ -25,7 +31,7 @@ function App() {
     return isIos || isSafariDesktop;
   })();
 
-  const onReady = async (event) => {
+  const onReady: YouTubeProps["onReady"] = async (event) => {
     playerRef.current = event.target;
     setIsPlayerReady(true);
 
@@ -48,7 +54,7 @@ function App() {
   };
 
   // Quando entrar em PLAYING depois do clique, desmuta (especialmente para Safari)
-  const onStateChange = (event) => {
+  const onStateChange: YouTubeProps["onStateChange"] = (event) => {
     const p = playerRef.current;
     if (!p) return;
     const YT = window.YT?.PlayerState;
