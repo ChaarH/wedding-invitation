@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import YouTube, { type YouTubeEvent, type YouTubeProps } from "react-youtube";
 import floralLeft from "./assets/images/xba9QFH.png";
 import floralRight from "./assets/images/tGikO64.png";
@@ -22,14 +22,6 @@ function App() {
   const [awaitingUnmute, setAwaitingUnmute] = useState(false); // sinaliza que clicamos e queremos desmutar ao entrar em PLAYING
 
   const playerRef = useRef<YouTubeEvent["target"] | null>(null);
-
-  // Detecção simples de Safari
-  const isSafari = (() => {
-    const ua = navigator.userAgent;
-    const isIos = /iP(hone|od|ad)/.test(ua);
-    const isSafariDesktop = /^((?!chrome|android).)*safari/i.test(ua);
-    return isIos || isSafariDesktop;
-  })();
 
   const onReady: YouTubeProps["onReady"] = async (event) => {
     playerRef.current = event.target;
